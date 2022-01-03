@@ -25,14 +25,14 @@ fn a34_up_to(limit: usize) -> usize {
 
     let a_limit = (limit / 11) + 1;
     let a_steps: Vec<usize> = (11..a_limit).step_by(10).collect();
+    // println!("a setps: {}", a_steps.len());
     let result: FxHashSet<usize> = a_steps.into_par_iter().map(|a| {
-        let mut result = FxHashSet::default();
         let b_limit = (limit / a) + 1;
-        for b in (a..b_limit).step_by(10) {
-            result.insert(a * b);
-        }
-        result
-    }).flatten().collect();
+        let b_steps = (a..b_limit).step_by(10);
+        (a, b_steps)
+    }).map(|(a, b_steps)| {
+        b_steps.map(move |y| (a, y)).collect::<Vec<(usize, usize)>>()
+    }).flatten().map(|(a, b)| a * b).collect();
 
-    return result.len()
+    result.len()
 }
