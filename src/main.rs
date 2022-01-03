@@ -30,6 +30,8 @@ fn a34_up_to(limit: usize) -> usize {
         for b in (*a..b_limit).step_by(10) {
             result.push(a * b);
         }
+        result.par_sort_unstable();
+        result.dedup();
         result
     }).flatten().collect();
 
