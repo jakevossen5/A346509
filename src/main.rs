@@ -28,13 +28,12 @@ fn a34_up_to(limit: usize) -> usize {
     // println!("a setps: {}", a_steps.len());
     let result: HashSet<usize> = a_steps.into_par_iter().map(|a| {
         let b_limit = (limit / a) + 1;
-        let b_steps = (a..b_limit).step_by(10);
-        (a, b_steps)
+        let b_steps: Vec<usize> = (a..b_limit).step_by(10).collect();
+        (a, b_steps.into_par_iter())
     })
-    .filter(|(_, b)| b.len() != 0 )
     .map(|(a, b_steps)| {
-        b_steps.map(move |y| (a, y)).collect::<Vec<(usize, usize)>>()
-    }).flatten().map(|(a, b)| a * b).collect();
+        b_steps.map(move |b | a * b)
+    }).flatten().collect();
 
     result.len()
 
