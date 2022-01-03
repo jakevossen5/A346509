@@ -24,19 +24,14 @@ fn a34_up_to(limit: usize) -> usize {
 
     let a_limit = (limit / 11) + 1;
     let a_steps: Vec<usize> = (11..a_limit).step_by(10).collect();
-    let mut result: Vec<usize> = a_steps.par_iter().map(|a| {
-        let mut result = Vec::new();
+    let result: HashSet<usize> = a_steps.into_par_iter().map(|a| {
+        let mut result = HashSet::new();
         let b_limit = (limit / a) + 1;
-        for b in (*a..b_limit).step_by(10) {
-            result.push(a * b);
+        for b in (a..b_limit).step_by(10) {
+            result.insert(a * b);
         }
-        result.par_sort_unstable();
-        result.dedup();
         result
     }).flatten().collect();
 
-    result.par_sort_unstable();
-    result.dedup();
-
-    return result.len();
+    return result.len()
 }
