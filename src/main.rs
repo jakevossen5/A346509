@@ -43,13 +43,15 @@ fn A346507() {
         let a_steps = (11..a_limit).step_by(10).collect_vec();
         let groups = a_steps.chunks(60).map(|e| e.to_owned()).collect_vec();
         let mut result: Vec<u128> = groups.into_par_iter().map(|a_steps| {
-            let mut local_result = FxHashSet::default();
+            let mut local_result = Vec::with_capacity(a_steps.len());
             for a in a_steps {
                 let b_limit = limit / a + 1;
                 for b in (a..b_limit).step_by(10) {
-                    local_result.insert(a * b);
+                    local_result.push(a * b);
                 }
             }
+            local_result.par_sort_unstable();
+            local_result.dedup();
             local_result
         }).flatten().collect();
 
