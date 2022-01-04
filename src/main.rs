@@ -41,12 +41,12 @@ fn A346507() {
     fn helper(limit: u128) -> Vec<u128> {
         let a_limit = limit / 11 + 1;
         let a_steps = (11..a_limit).step_by(10).collect_vec();
-        let groups = a_steps.chunks(60).collect_vec();
+        let groups = a_steps.chunks(60).map(|e| e.to_owned()).collect_vec();
         let result: FxHashSet<u128> = groups.into_par_iter().map(|a_steps| {
             let mut local_result = FxHashSet::default();
             for a in a_steps {
                 let b_limit = limit / a + 1;
-                for b in (*a..b_limit).step_by(10) {
+                for b in (a..b_limit).step_by(10) {
                     local_result.insert(a * b);
                 }
             }
