@@ -27,7 +27,7 @@ fn main() {
 }
 
 fn A346507() {
-    let r = helper(10000000000);
+    let r = helper(1000000000);
 
     for n in 1.. {
         let max = 10_u128.pow(n);
@@ -42,7 +42,7 @@ fn A346507() {
         let a_limit = limit / 11 + 1;
         let a_steps = (11..a_limit).step_by(10).collect_vec();
         let groups = a_steps.chunks(60).map(|e| e.to_owned()).collect_vec();
-        let result: FxHashSet<u128> = groups.into_par_iter().map(|a_steps| {
+        let mut result: Vec<u128> = groups.into_par_iter().map(|a_steps| {
             let mut local_result = FxHashSet::default();
             for a in a_steps {
                 let b_limit = limit / a + 1;
@@ -53,9 +53,9 @@ fn A346507() {
             local_result
         }).flatten().collect();
 
-        let mut res_arr: Vec<u128> = result.into_iter().collect();
-        res_arr.sort_unstable();
-        res_arr
+        result.par_sort_unstable();
+        result.dedup();
+        result
     }
 }
 
